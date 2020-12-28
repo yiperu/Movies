@@ -23,10 +23,11 @@ class MainActivity : AppCompatActivity() {
                 Movie("Title 7", "https://loremflickr.com/320/240?lock=7"),
                 Movie("Title 8", "https://loremflickr.com/320/240?lock=8"),
                 Movie("Title 9", "https://loremflickr.com/320/240?lock=9")
-            )
-
+            ),
+            { movie ->
+                Toast.makeText(this@MainActivity, movie.name, Toast.LENGTH_SHORT).show()
+            }
         )
-
-
     }
 }
+
