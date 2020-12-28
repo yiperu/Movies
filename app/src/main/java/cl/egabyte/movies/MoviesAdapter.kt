@@ -5,6 +5,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import cl.egabyte.movies.databinding.ViewMovieItemBinding
+import com.bumptech.glide.Glide
 
 class MoviesAdapter(private val movies: List<Movie>): RecyclerView.Adapter<MoviesAdapter.ViewHolder>() {
 
@@ -24,8 +25,10 @@ class MoviesAdapter(private val movies: List<Movie>): RecyclerView.Adapter<Movie
     override fun getItemCount(): Int = movies.size
 
     class ViewHolder(private val  binding: ViewMovieItemBinding): RecyclerView.ViewHolder(binding.root){
+        // Glide.with(this).load("http://goo.gl/gEgYUd").into(imageView);
         fun binding(movie: Movie){
             binding.nameTextView.text = movie.name
+            Glide.with(binding.root.context).load(movie.cover).into(binding.coverImageView)
         }
 
     }
