@@ -2,8 +2,11 @@ package cl.egabyte.movies
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
 import android.widget.Toast
 import cl.egabyte.movies.databinding.ActivityMainBinding
+import cl.egabyte.movies.model.MovieDbClient
+import kotlin.concurrent.thread
 
 class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -23,11 +26,20 @@ class MainActivity : AppCompatActivity() {
                 Movie("Title 7", "https://loremflickr.com/320/240?lock=7"),
                 Movie("Title 8", "https://loremflickr.com/320/240?lock=8"),
                 Movie("Title 9", "https://loremflickr.com/320/240?lock=9")
-            ),
-            { movie ->
-                Toast.makeText(this@MainActivity, movie.name, Toast.LENGTH_SHORT).show()
+            )
+        ){ movie ->
+            Toast.makeText(this@MainActivity, movie.name, Toast.LENGTH_SHORT).show()
+        }
+
+        thread {
+
+            val apiKey = getString(R.string.api_key)
+            val popularMovies = MovieDbClient.service.listPopularMovies(apiKey)
+            val body = popularMovies.execute().body()
+            if (body != null){
+                Log.d("MainActivity", "Movie Count: ${body.results.size}")
             }
-        )
+        }
     }
 }
 
