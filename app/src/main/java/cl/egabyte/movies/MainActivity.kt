@@ -21,7 +21,7 @@ class MainActivity : AppCompatActivity() {
 
         val moviesAdapter = MoviesAdapter(
                 emptyList()
-        ){ movie ->
+        ) { movie ->
             Toast.makeText(this@MainActivity, movie.title, Toast.LENGTH_SHORT).show()
         }
 
@@ -29,14 +29,10 @@ class MainActivity : AppCompatActivity() {
 
         lifecycleScope.launch {
             val apiKey = getString(R.string.api_key)
-            val popularMovies = MovieDbClient.service.listPopularMovies(apiKey) 
-            val body = withContext(Dispatchers.IO) { popularMovies.execute().body() }
-            if (body != null){
-                moviesAdapter.movies = body.results
-                moviesAdapter.notifyDataSetChanged()
-            }
+            val popularMovies = MovieDbClient.service.listPopularMovies(apiKey)
+            moviesAdapter.movies = popularMovies.results
+            moviesAdapter.notifyDataSetChanged()
         }
-
     }
 }
 
