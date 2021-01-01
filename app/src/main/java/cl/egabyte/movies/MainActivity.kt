@@ -4,8 +4,12 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import android.widget.Toast
+import androidx.lifecycle.lifecycleScope
 import cl.egabyte.movies.databinding.ActivityMainBinding
 import cl.egabyte.movies.model.MovieDbClient
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import kotlin.concurrent.thread
 
 class MainActivity : AppCompatActivity() {
@@ -23,18 +27,16 @@ class MainActivity : AppCompatActivity() {
 
         binding.MovieRecyclerView.adapter = moviesAdapter
 
-        thread {
-
+        lifecycleScope.launch {
             val apiKey = getString(R.string.api_key)
-            val popularMovies = MovieDbClient.service.listPopularMovies(apiKey)
-            val body = popularMovies.execute().body()
-            runOnUiThread {
-                if (body != null){
-                    moviesAdapter.movies = body.results
-                    moviesAdapter.notifyDataSetChanged()
-                }
+            val popularMovies = MovieDbClient.service.listPopularMovies(apiKey) 
+            val body = withContext(Dispatchers.IO) { popularMovies.execute().body() }
+            if (body != null){
+                moviesAdapter.movies = body.results
+                moviesAdapter.notifyDataSetChanged()
             }
         }
+
     }
 }
 
