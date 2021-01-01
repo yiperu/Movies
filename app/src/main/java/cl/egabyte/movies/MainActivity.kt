@@ -1,16 +1,13 @@
 package cl.egabyte.movies
 
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.util.Log
-import android.widget.Toast
 import androidx.lifecycle.lifecycleScope
 import cl.egabyte.movies.databinding.ActivityMainBinding
+import cl.egabyte.movies.model.Movie
 import cl.egabyte.movies.model.MovieDbClient
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
-import kotlin.concurrent.thread
 
 class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -21,8 +18,8 @@ class MainActivity : AppCompatActivity() {
 
         val moviesAdapter = MoviesAdapter(
                 emptyList()
-        ) { movie ->
-            Toast.makeText(this@MainActivity, movie.title, Toast.LENGTH_SHORT).show()
+        ) {
+            navitageTo(it)
         }
 
         binding.MovieRecyclerView.adapter = moviesAdapter
@@ -33,6 +30,12 @@ class MainActivity : AppCompatActivity() {
             moviesAdapter.movies = popularMovies.results
             moviesAdapter.notifyDataSetChanged()
         }
+    }
+
+    private fun navitageTo(movie: Movie) {
+        val intent = Intent(this, DetailActivity::class.java)
+        intent.putExtra(DetailActivity.EXTRA_TITLE, movie.title)
+        startActivity(intent)
     }
 }
 
