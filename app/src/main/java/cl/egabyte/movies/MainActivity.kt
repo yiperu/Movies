@@ -34,7 +34,7 @@ class MainActivity : AppCompatActivity() {
 
     private fun navitageTo(movie: Movie) {
         val intent = Intent(this, DetailActivity::class.java)
-        intent.putExtra(DetailActivity.EXTRA_TITLE, movie.title)
+        intent.putExtra(DetailActivity.EXTRA_MOVIE, movie)
         startActivity(intent)
     }
 }
